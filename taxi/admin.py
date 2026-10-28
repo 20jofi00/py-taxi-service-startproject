@@ -6,8 +6,12 @@ from .models import Manufacturer, Car, Driver
 
 @admin.register(Car)
 class CarAdmin(admin.ModelAdmin):
+    def display_drivers(self, obj):
+        return ", ".join(driver.username for driver in obj.drivers.all())
+
     search_fields = ("model", )
     list_filter = ("manufacturer", )
+    list_display = ("manufacturer", "model", "display_drivers")
 
 
 @admin.register(Driver)
@@ -23,4 +27,6 @@ class DriverAdmin(UserAdmin):
     )
 
 
-admin.site.register(Manufacturer)
+@admin.register(Manufacturer)
+class ManufacturerAdmin(admin.ModelAdmin):
+    list_display = ("name", "country")
